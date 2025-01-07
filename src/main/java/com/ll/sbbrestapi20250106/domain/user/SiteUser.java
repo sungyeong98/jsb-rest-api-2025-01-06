@@ -25,8 +25,19 @@ public class SiteUser extends BaseTime {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true, length = 50)
+    private String apiKey;
+
     public String getNickname() {
-        return this.nickname;
+        return nickname;
+    }
+
+    public boolean isAdmin() {
+        return "admin".equals(username);
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 
 }

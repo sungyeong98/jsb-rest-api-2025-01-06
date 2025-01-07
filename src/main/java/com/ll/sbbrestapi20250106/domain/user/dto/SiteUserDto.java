@@ -1,6 +1,7 @@
-package com.ll.sbbrestapi20250106.domain.user;
+package com.ll.sbbrestapi20250106.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ll.sbbrestapi20250106.domain.user.SiteUser;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -21,12 +22,15 @@ public class SiteUserDto {
 
     private String email;
 
+    private String apiKey;
+
     public SiteUserDto(SiteUser user) {
         this.id = user.getId();
         this.createDate = user.getCreateDate();
         this.modifyDate = user.getModifyDate();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
+        this.apiKey = user.getApiKey();
     }
 
 }
