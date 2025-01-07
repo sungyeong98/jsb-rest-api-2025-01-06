@@ -14,6 +14,12 @@ public class UserService {
     }
 
     public User join(String username, String password, String nickname, String email) {
+        userRepository
+                .findByUsername(username)
+                .ifPresent(_ -> {
+                    throw new IllegalArgumentException("이미 존재하는 ID입니다.");
+                });
+
         User user = User.builder()
                 .username(username)
                 .password(password)
