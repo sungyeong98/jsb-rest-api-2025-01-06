@@ -37,4 +37,9 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
+    public void modify(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+    }
+
 }

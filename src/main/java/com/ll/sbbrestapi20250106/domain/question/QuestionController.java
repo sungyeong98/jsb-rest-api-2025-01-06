@@ -1,5 +1,8 @@
 package com.ll.sbbrestapi20250106.domain.question;
 
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +37,28 @@ public class QuestionController {
         Map<String, Object> rsData = new HashMap<>();
         rsData.put("resultCode", "200-1");
         rsData.put("msg", "%d번 게시물이 삭제되었습니다.".formatted(id));
+
+        return rsData;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class QuestionModifyReqBody {
+        private String subject;
+        private String content;
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public Map<String, Object> modifyQuestion(@PathVariable Long id,
+                                              @RequestBody QuestionModifyReqBody reqBody) {
+        Question question = questionService.findById(id).get();
+
+        questionService.modify(question, reqBody.getSubject(), reqBody.getContent());
+
+        Map<String, Object> rsData = new HashMap<>();
+        rsData.put("resultCode", "200-1");
+        rsData.put("msg", "%d번 글이 수정되었습니다.".formatted(id));
 
         return rsData;
     }
