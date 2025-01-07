@@ -60,15 +60,16 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     @Transactional
-    public RsData modifyQuestion(@PathVariable Long id,
+    public RsData<QuestionDto> modifyQuestion(@PathVariable Long id,
                                  @RequestBody @Valid QuestionModifyReqBody reqBody) {
         Question question = questionService.findById(id).get();
 
         questionService.modify(question, reqBody.subject, reqBody.content);
 
-        return new RsData(
+        return new RsData<>(
                 "200-1",
-                "%d번 글이 수정되었습니다.".formatted(id)
+                "%d번 글이 수정되었습니다.".formatted(id),
+                new QuestionDto(question)
         );
     }
 
@@ -82,13 +83,13 @@ public class QuestionController {
     ) {}
 
     @PostMapping
-    public RsData createQuestion(@RequestBody @Valid QuestionCreateReqBody reqBody) {
+    public RsData<Long> createQuestion(@RequestBody @Valid QuestionCreateReqBody reqBody) {
         Question question = questionService.write(reqBody.subject, reqBody.content);
 
-        return new RsData(
+        return new RsData<>(
                 "200-1",
                 "%d번 글이 작성되었습니다.".formatted(question.getId())
-                ,new QuestionDto(question)
+                ,question.getId()
         );
     }
 
