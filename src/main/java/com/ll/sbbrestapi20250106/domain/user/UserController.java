@@ -1,13 +1,17 @@
 package com.ll.sbbrestapi20250106.domain.user;
 
+import com.ll.sbbrestapi20250106.domain.question.QuestionService;
+import com.ll.sbbrestapi20250106.domain.question.dto.QuestionListDto;
 import com.ll.sbbrestapi20250106.domain.user.dto.SiteUserDto;
 import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
 import com.ll.sbbrestapi20250106.global.rq.Rq;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
+import com.ll.sbbrestapi20250106.standard.page.PageDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final QuestionService questionService;
     private final UserService userService;
     private final Rq rq;
 
@@ -35,6 +40,7 @@ public class UserController {
 
 
     @PostMapping("/sign-up")
+    @Transactional
     public RsData<SiteUserDto> signup(
             @Valid @RequestBody UserSignupReqBody reqBody
     ) {
@@ -60,6 +66,7 @@ public class UserController {
     ) {}
 
     @PostMapping("/login")
+    @Transactional(readOnly = true)
     public RsData<UserLoginResBody> login(
             @Valid @RequestBody UserLoginReqBody reqBody
     ) {
@@ -82,10 +89,27 @@ public class UserController {
     }
 
     @GetMapping("/profile")
+    @Transactional(readOnly = true)
     public SiteUserDto profile() {
         SiteUser user = rq.checkAuthentication();
 
         return new SiteUserDto(user);
+    }
+
+    @GetMapping("/profile/my-list")
+    @Transactional(readOnly = true)
+    public PageDto<QuestionListDto> myList(
+            @RequestParam(defaultValue = "subject") String searchKeywordType,
+            @RequestParam(defaultValue = "") String searchKeyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize
+    ) {
+        SiteUser user = rq.checkAuthentication();
+
+        return new PageDto<>(
+                questionService.findByAuthorPaged(user, searchKeywordType, searchKeyword, page, pageSize)
+                        .map(QuestionListDto::new)
+        );
     }
 
 }

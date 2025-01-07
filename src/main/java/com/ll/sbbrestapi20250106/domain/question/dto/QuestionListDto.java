@@ -7,28 +7,29 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class QuestionDto {
+public class QuestionListDto {
 
     private Long id;
 
-    @JsonProperty("createdDatetime")
     private LocalDateTime createDate;
 
-    @JsonProperty("modifiedDatetime")
     private LocalDateTime modifyDate;
 
     private String subject;
 
-    private String content;
-
     private String author;
 
-    public QuestionDto(Question question) {
+    private boolean published;
+
+    private boolean listed;
+
+    public QuestionListDto(Question question) {
         this.id = question.getId();
         this.createDate = question.getCreateDate();
         this.modifyDate = question.getModifyDate();
         this.subject = question.getSubject();
-        this.content = question.getContent();
         this.author = question.getAuthor().getNickname();
+        this.published = question.isPublished();
+        this.listed = question.isListed();
     }
 }

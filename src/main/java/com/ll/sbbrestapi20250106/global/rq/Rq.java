@@ -3,7 +3,7 @@ package com.ll.sbbrestapi20250106.global.rq;
 import com.ll.sbbrestapi20250106.domain.user.SiteUser;
 import com.ll.sbbrestapi20250106.domain.user.UserService;
 import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
-import com.ll.sbbrestapi20250106.global.standard.util.Ut;
+import com.ll.sbbrestapi20250106.standard.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

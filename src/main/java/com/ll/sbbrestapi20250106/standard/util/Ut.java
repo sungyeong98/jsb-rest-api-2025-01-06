@@ -1,4 +1,4 @@
-package com.ll.sbbrestapi20250106.global.standard.util;
+package com.ll.sbbrestapi20250106.standard.util;
 
 public class Ut {
     public static class str {
