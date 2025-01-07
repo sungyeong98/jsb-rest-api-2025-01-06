@@ -23,15 +23,18 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public List<Question> getList() {
-        return questionService.findAll();
+    public List<QuestionDto> getList() {
+        return questionService.findAll()
+                .stream()
+                .map(QuestionDto::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
     public QuestionDto getDetail(@PathVariable Long id) {
-        Question question = questionService.findById(id).get();
-
-        return new QuestionDto(question);
+        return questionService.findById(id)
+                .map(QuestionDto::new)
+                .orElseThrow();
     }
 
     @DeleteMapping("/{id}")
