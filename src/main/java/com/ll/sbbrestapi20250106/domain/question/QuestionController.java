@@ -66,4 +66,23 @@ public class QuestionController {
         );
     }
 
+    record QuestionCreateReqBody (
+            @NotBlank
+            @Length(min = 3)
+            String subject,
+            @NotBlank
+            @Length(min = 3)
+            String content
+    ) {}
+
+    @PostMapping
+    public RsData createQuestion(@RequestBody @Valid QuestionCreateReqBody reqBody) {
+        Question question = questionService.write(reqBody.subject, reqBody.content);
+
+        return new RsData(
+                "200-1",
+                "%d번 글이 작성되었습니다.".formatted(question.getId())
+        );
+    }
+
 }
