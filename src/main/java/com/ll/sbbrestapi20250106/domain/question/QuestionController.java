@@ -39,12 +39,11 @@ public class QuestionController {
         );
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class QuestionModifyReqBody {
-        private String subject;
-        private String content;
-    }
+    record QuestionModifyReqBody (
+            String subject,
+            String content
+    ) {}
+
 
     @PutMapping("/{id}")
     @Transactional
@@ -52,7 +51,7 @@ public class QuestionController {
                                               @RequestBody QuestionModifyReqBody reqBody) {
         Question question = questionService.findById(id).get();
 
-        questionService.modify(question, reqBody.getSubject(), reqBody.getContent());
+        questionService.modify(question, reqBody.subject, reqBody.content);
 
         return new RsData(
                 "200-1",
