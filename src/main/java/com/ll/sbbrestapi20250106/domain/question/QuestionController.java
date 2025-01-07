@@ -92,7 +92,7 @@ public class QuestionController {
         Question question = questionService.write(reqBody.subject, reqBody.content);
 
         return new RsData<>(
-                "200-1",
+                "201-1",
                 "%d번 글이 작성되었습니다.".formatted(question.getId()),
                 new QuestionCreateResBody(
                         new QuestionDto(question),
