@@ -1,5 +1,6 @@
 package com.ll.sbbrestapi20250106.domain.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
