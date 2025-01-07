@@ -48,7 +48,9 @@ public class UserController {
     }
 
     record  UserLoginReqBody(
+            @NotBlank
             String username,
+            @NotBlank
             String password
     ) {}
 
@@ -59,7 +61,7 @@ public class UserController {
 
     @PostMapping("/login")
     public RsData<UserLoginResBody> login(
-            @RequestBody UserLoginReqBody reqBody
+            @Valid @RequestBody UserLoginReqBody reqBody
     ) {
         SiteUser user = userService
                 .findByUsername(reqBody.username)
