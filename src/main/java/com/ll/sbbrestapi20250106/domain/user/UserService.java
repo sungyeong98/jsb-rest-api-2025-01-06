@@ -37,4 +37,8 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<SiteUser> findByApiKey(String apiKey) {
+        return userRepository.findByApiKey(apiKey);
+    }
+
 }
