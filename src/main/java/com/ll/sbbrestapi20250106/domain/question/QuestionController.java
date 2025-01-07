@@ -38,11 +38,11 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public RsData deleteQuestion(@PathVariable Long id) {
+    public RsData<Void> deleteQuestion(@PathVariable Long id) {
         Question question = questionService.findById(id).get();
         questionService.delete(question);
 
-        return new RsData(
+        return new RsData<>(
                 "200-1",
                 "%d번 글이 삭제되었습니다.".formatted(id)
         );
