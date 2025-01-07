@@ -1,5 +1,6 @@
 package com.ll.sbbrestapi20250106.domain.question;
 
+import com.ll.sbbrestapi20250106.domain.question.dto.QuestionDto;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,8 +28,10 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public Question getDetail(@PathVariable Long id) {
-        return questionService.findById(id).get();
+    public QuestionDto getDetail(@PathVariable Long id) {
+        Question question = questionService.findById(id).get();
+
+        return new QuestionDto(question);
     }
 
     @DeleteMapping("/{id}")
