@@ -2,9 +2,12 @@ package com.ll.sbbrestapi20250106.domain.question;
 
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -40,7 +43,11 @@ public class QuestionController {
     }
 
     record QuestionModifyReqBody (
+            @NotBlank
+            @Length(min = 3)
             String subject,
+            @NotBlank
+            @Length(min = 3)
             String content
     ) {}
 
@@ -48,7 +55,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     @Transactional
     public RsData modifyQuestion(@PathVariable Long id,
-                                              @RequestBody QuestionModifyReqBody reqBody) {
+                                 @RequestBody @Valid QuestionModifyReqBody reqBody) {
         Question question = questionService.findById(id).get();
 
         questionService.modify(question, reqBody.subject, reqBody.content);
