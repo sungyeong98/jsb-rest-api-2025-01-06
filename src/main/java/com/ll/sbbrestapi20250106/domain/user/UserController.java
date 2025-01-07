@@ -19,10 +19,10 @@ public class UserController {
 
     record UserSignupReqBody(
             @NotBlank
-            @Length(min = 4, max = 20)
+            @Length(min = 3, max = 20)
             String username,
             @NotBlank
-            @Length(min = 4, max = 50)
+            @Length(min = 3, max = 50)
             String password,
             @NotBlank
             @Length(min = 2, max = 20)
@@ -34,15 +34,15 @@ public class UserController {
 
 
     @PostMapping("/sign-up")
-    public RsData<UserDto> signup(
+    public RsData<SiteUserDto> signup(
             @Valid @RequestBody UserSignupReqBody reqBody
     ) {
-        User user = userService.join(reqBody.username, reqBody.password, reqBody.nickname, reqBody.email);
+        SiteUser user = userService.join(reqBody.username, reqBody.password, reqBody.nickname, reqBody.email);
 
         return new RsData<>(
                 "201-1",
                 "%s님, 환영합니다.".formatted(user.getNickname()),
-                new UserDto(user)
+                new SiteUserDto(user)
         );
     }
 

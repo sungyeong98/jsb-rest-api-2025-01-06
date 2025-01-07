@@ -1,6 +1,7 @@
 package com.ll.sbbrestapi20250106.global.globalExceptionHandler;
 
 import com.ll.sbbrestapi20250106.global.app.AppConfig;
+import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -42,6 +43,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + "-" + error.getCode() + "-" + error.getDefaultMessage())
                 .sorted(Comparator.comparing(String::toString))
                 .collect(Collectors.joining("\n"));
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new RsData<>(
@@ -50,15 +52,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<RsData<Void>> handle(IllegalArgumentException ex) {
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<RsData<Void>> handle(ServiceException ex) {
         if (AppConfig.isNotProd()) ex.printStackTrace();
+
+        RsData<Void> rsData = ex.getRsData();
+
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new RsData<>(
-                        "400-1",
-                        ex.getMessage()
-                ));
+                .status(rsData.getStatusCode())
+                .body(rsData);
     }
 
 }

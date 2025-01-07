@@ -1,19 +1,17 @@
 package com.ll.sbbrestapi20250106.domain.question;
 
 import com.ll.sbbrestapi20250106.domain.question.dto.QuestionDto;
+import com.ll.sbbrestapi20250106.domain.user.SiteUser;
+import com.ll.sbbrestapi20250106.domain.user.UserService;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/question_list")
@@ -21,6 +19,7 @@ import java.util.Map;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final UserService userService;
 
     @GetMapping
     public List<QuestionDto> getList() {
@@ -89,7 +88,8 @@ public class QuestionController {
 
     @PostMapping
     public RsData<QuestionCreateResBody> createQuestion(@RequestBody @Valid QuestionCreateReqBody reqBody) {
-        Question question = questionService.write(reqBody.subject, reqBody.content);
+        SiteUser user = userService.findByUsername("user3").get();
+        Question question = questionService.write(reqBody.subject, reqBody.content, user);
 
         return new RsData<>(
                 "201-1",

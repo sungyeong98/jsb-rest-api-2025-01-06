@@ -1,5 +1,6 @@
 package com.ll.sbbrestapi20250106.domain.question;
 
+import com.ll.sbbrestapi20250106.domain.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,9 @@ public class QuestionService {
         return questionRepository.count();
     }
 
-    public Question write(String subject, String content) {
+    public Question write(String subject, String content, SiteUser user) {
         Question question = Question.builder()
+                .author(user)
                 .subject(subject)
                 .content(content)
                 .build();
