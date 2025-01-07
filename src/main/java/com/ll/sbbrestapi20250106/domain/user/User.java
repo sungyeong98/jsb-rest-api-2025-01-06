@@ -1,24 +1,25 @@
 package com.ll.sbbrestapi20250106.domain.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import com.ll.sbbrestapi20250106.domain.base.BaseTime;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
 @Getter
 @Setter
-public class User {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends BaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true)
+    @Column(unique = true, length = 20)
     private String username;
 
+    @Column(length = 50)
     private String password;
+
+    @Column(length = 20)
+    private String nickname;
 
     @Column(unique = true)
     private String email;
