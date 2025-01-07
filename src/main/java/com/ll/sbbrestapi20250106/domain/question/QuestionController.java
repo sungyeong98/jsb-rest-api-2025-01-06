@@ -38,7 +38,7 @@ public class QuestionController {
 
         return new RsData(
                 "200-1",
-                "%번 글이 삭제되었습니다.".formatted(id)
+                "%d번 글이 삭제되었습니다.".formatted(id)
         );
     }
 
