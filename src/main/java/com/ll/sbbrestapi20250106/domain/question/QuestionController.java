@@ -88,6 +88,7 @@ public class QuestionController {
         return new RsData(
                 "200-1",
                 "%d번 글이 작성되었습니다.".formatted(question.getId())
+                ,new QuestionDto(question)
         );
     }
 
