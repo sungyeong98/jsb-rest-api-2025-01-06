@@ -47,6 +47,10 @@ public class UserService {
         return authTokenService.genAccessToken(user);
     }
 
+    public String genAuthToken(SiteUser user) {
+        return genAccessToken(user);
+    }
+
     public SiteUser getUserFromAccessToken(String accessToken) {
         Map<String, Object> payload = authTokenService.payload(accessToken);
 

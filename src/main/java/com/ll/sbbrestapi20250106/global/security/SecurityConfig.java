@@ -22,6 +22,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/api/v1/user/test").permitAll()   // 엑세스 토큰을 얻기 위한 꼼수, 삭제 예정
                                 .requestMatchers(HttpMethod.GET, "/api/*/question_list/{id:\\d+}", "/api/*/question_list", "/api/*/question_list/{id:\\d+}/answer_list")
                                 .permitAll()
                                 .requestMatchers("/api/*/user/login", "/api/*/user/sign-up").permitAll()
