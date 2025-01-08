@@ -22,6 +22,7 @@ public class UserController {
     private final QuestionService questionService;
     private final UserService userService;
     private final Rq rq;
+    private final AuthTokenService authTokenService;
 
     record UserSignupReqBody(
             @NotBlank
@@ -62,7 +63,8 @@ public class UserController {
 
     record UserLoginResBody(
             SiteUserDto item,
-            String apiKey
+            String apiKey,
+            String accessToken
     ) {}
 
     @PostMapping("/login")
@@ -78,12 +80,15 @@ public class UserController {
             throw new ServiceException("401-2", "비밀번호가 일치하지 않습니다.");
         }
 
+        String accessToken = authTokenService.genAccessToken(user);
+
         return new RsData<>(
                 "200-1",
                 "%s님, 환영합니다.".formatted(user.getNickname()),
                 new UserLoginResBody(
                         new SiteUserDto(user),
-                        user.getApiKey()
+                        user.getApiKey(),
+                        accessToken
                 )
         );
     }
