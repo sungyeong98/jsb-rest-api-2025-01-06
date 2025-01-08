@@ -35,6 +35,19 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setContentType("application/json; charset=utf-8");
+
+                            boolean is401 = authException.getLocalizedMessage().contains("authentication is required");
+
+                            if (is401) {
+                                response.setStatus(401);
+                                response.getWriter().write(
+                                        Ut.json.toString(
+                                                new RsData("401-1", "사용자 인증정보가 올바르지 않습니다.")
+                                        )
+                                );
+                                return;
+                            }
+
                             response.setStatus(403);
                             response.getWriter().write(
                                     Ut.json.toString(
