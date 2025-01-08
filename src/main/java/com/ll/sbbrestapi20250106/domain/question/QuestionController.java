@@ -7,12 +7,17 @@ import com.ll.sbbrestapi20250106.domain.user.UserService;
 import com.ll.sbbrestapi20250106.global.rq.Rq;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import com.ll.sbbrestapi20250106.standard.page.PageDto;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/question_list")
@@ -43,7 +48,7 @@ public class QuestionController {
         Question question = questionService.findById(id).get();
 
         if (!question.isPublished()) {
-            SiteUser user = rq.checkAuthentication();
+            SiteUser user = rq.getActor();
 
             question.checkActorCanRead(user);
         }
@@ -51,20 +56,35 @@ public class QuestionController {
         return new QuestionDetailDto(question);
     }
 
-    @DeleteMapping("/{id}")
+    record QuestionCreateReqBody (
+            @NotBlank
+            @Length(min = 3)
+            String subject,
+            @NotBlank
+            @Length(min = 3)
+            String content,
+            boolean published,
+            boolean listed
+    ) {}
+
+    @PostMapping
     @Transactional
-    public RsData<Void> deleteQuestion(@PathVariable Long id) {
-        SiteUser user = rq.checkAuthentication();
+    public RsData<QuestionDetailDto> createQuestion(
+            @RequestBody @Valid QuestionCreateReqBody reqBody,
+            @AuthenticationPrincipal UserDetails user
+    ) {
+        SiteUser actor = rq.getActor();
 
-        Question question = questionService.findById(id).get();
+        if (user != null) {
+            actor = rq.getActorByUsername(user.getUsername());
+        }
 
-        question.checkActorCanDelete(user);
-
-        questionService.delete(question);
+        Question question = questionService.write(actor, reqBody.subject, reqBody.content, reqBody.published, reqBody.listed);
 
         return new RsData<>(
-                "200-1",
-                "%d번 글이 삭제되었습니다.".formatted(id)
+                "201-1",
+                "%d번 글이 작성되었습니다.".formatted(question.getId()),
+                new QuestionDetailDto(question)
         );
     }
 
@@ -83,8 +103,8 @@ public class QuestionController {
     @PutMapping("/{id}")
     @Transactional
     public RsData<QuestionDetailDto> modifyQuestion(@PathVariable Long id,
-                                                  @RequestBody @Valid QuestionModifyReqBody reqBody) {
-        SiteUser user = rq.checkAuthentication();
+                                                    @RequestBody @Valid QuestionModifyReqBody reqBody) {
+        SiteUser user = rq.getActor();
 
         Question question = questionService.findById(id).get();
 
@@ -101,28 +121,20 @@ public class QuestionController {
         );
     }
 
-    record QuestionCreateReqBody (
-            @NotBlank
-            @Length(min = 3)
-            String subject,
-            @NotBlank
-            @Length(min = 3)
-            String content,
-            boolean published,
-            boolean listed
-    ) {}
-
-    @PostMapping
+    @DeleteMapping("/{id}")
     @Transactional
-    public RsData<QuestionDetailDto> createQuestion(@RequestBody @Valid QuestionCreateReqBody reqBody) {
-        SiteUser user = rq.checkAuthentication();
+    public RsData<Void> deleteQuestion(@PathVariable Long id) {
+        SiteUser user = rq.getActor();
 
-        Question question = questionService.write(user, reqBody.subject, reqBody.content, reqBody.published, reqBody.listed);
+        Question question = questionService.findById(id).get();
+
+        question.checkActorCanDelete(user);
+
+        questionService.delete(question);
 
         return new RsData<>(
-                "201-1",
-                "%d번 글이 작성되었습니다.".formatted(question.getId()),
-                new QuestionDetailDto(question)
+                "200-1",
+                "%d번 글이 삭제되었습니다.".formatted(id)
         );
     }
 

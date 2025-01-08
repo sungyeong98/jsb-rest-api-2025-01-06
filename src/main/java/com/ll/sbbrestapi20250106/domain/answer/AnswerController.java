@@ -49,7 +49,7 @@ public class AnswerController {
     @Transactional
     public RsData<AnswerDto> createAnswer(@PathVariable Long question_id,
                                           @Valid @RequestBody AnswerCreateReqbody reqbody) {
-        SiteUser user = rq.checkAuthentication();
+        SiteUser user = rq.getActor();
 
         Question question = questionService.findById(question_id).orElseThrow(
                 () -> new ServiceException("404-1", "%d번 글이 존재하지 않습니다.".formatted(question_id))
@@ -80,7 +80,7 @@ public class AnswerController {
     public RsData<AnswerDto> modifyAnswer(@PathVariable Long question_id,
                                           @PathVariable Long id,
                                           @Valid @RequestBody AnswerModifyReqbody reqbody) {
-        SiteUser user = rq.checkAuthentication();
+        SiteUser user = rq.getActor();
 
         Question question = questionService.findById(question_id).orElseThrow(
                 () -> new ServiceException("404-1", "%d번 글이 존재하지 않습니다.".formatted(question_id))
@@ -104,7 +104,7 @@ public class AnswerController {
     @DeleteMapping("/{id}")
     @Transactional
     public RsData<Void> deleteAnswer(@PathVariable Long question_id, @PathVariable Long id) {
-        SiteUser user = rq.checkAuthentication();
+        SiteUser user = rq.getActor();
 
         Question question = questionService.findById(question_id).orElseThrow(
                 () -> new ServiceException("404-1", "%d번 글이 존재하지 않습니다.".formatted(question_id))

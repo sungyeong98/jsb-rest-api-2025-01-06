@@ -91,7 +91,7 @@ public class UserController {
     @GetMapping("/profile")
     @Transactional(readOnly = true)
     public SiteUserDto profile() {
-        SiteUser user = rq.checkAuthentication();
+        SiteUser user = rq.getActor();
 
         return new SiteUserDto(user);
     }
@@ -104,7 +104,7 @@ public class UserController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int pageSize
     ) {
-        SiteUser user = rq.checkAuthentication();
+        SiteUser user = rq.getActor();
 
         return new PageDto<>(
                 questionService.findByAuthorPaged(user, searchKeywordType, searchKeyword, page, pageSize)
