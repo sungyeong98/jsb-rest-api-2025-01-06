@@ -1,5 +1,7 @@
 package com.ll.sbbrestapi20250106.global.security;
 
+import com.ll.sbbrestapi20250106.global.rsData.RsData;
+import com.ll.sbbrestapi20250106.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +32,16 @@ public class SecurityConfig {
                         headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json; charset=utf-8");
+                            response.setStatus(403);
+                            response.getWriter().write(
+                                    Ut.json.toString(
+                                            new RsData("403-1", request.getRequestURI() + ", " + authException.getLocalizedMessage())
+                                    )
+                            );
+                        }))
         ;
 
         return http.build();
