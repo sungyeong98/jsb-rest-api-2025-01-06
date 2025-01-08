@@ -40,4 +40,9 @@ public class SiteUser extends BaseTime {
         return this.password.equals(password);
     }
 
+    public SiteUser(long id, String username) {
+        this.setId(id);
+        this.username = username;
+    }
+
 }

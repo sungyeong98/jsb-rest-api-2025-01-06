@@ -4,6 +4,7 @@ import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,19 @@ public class UserService {
 
     public String genAccessToken(SiteUser user) {
         return authTokenService.genAccessToken(user);
+    }
+
+    public SiteUser getUserFromAccessToken(String accessToken) {
+        Map<String, Object> payload = authTokenService.payload(accessToken);
+
+        if (payload == null) return null;
+
+        long id = (long) payload.get("id");
+        String username = (String) payload.get("username");
+
+        SiteUser user = new SiteUser(id, username);
+
+        return user;
     }
 
 }

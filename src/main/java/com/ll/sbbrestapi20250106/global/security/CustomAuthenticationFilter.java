@@ -27,19 +27,25 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         String authorization = request.getHeader("Authorization");
+
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        String apiKey = authorization.substring("Bearer ".length());
-        Optional<SiteUser> opMember = userService.findByApiKey(apiKey);
-        if (opMember.isEmpty()) {
+
+        String accessToken = authorization.substring("Bearer ".length());
+
+        SiteUser user = userService.getUserFromAccessToken(accessToken);
+
+        if (user == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        SiteUser user = opMember.get();
+
         rq.setLogin(user.getUsername());
+
         filterChain.doFilter(request, response);
     }
 

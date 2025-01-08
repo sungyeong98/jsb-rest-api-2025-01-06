@@ -17,7 +17,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PROTECTED)
     @EqualsAndHashCode.Include
     private Long id;
 
