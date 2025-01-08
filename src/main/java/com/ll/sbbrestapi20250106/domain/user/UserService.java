@@ -11,6 +11,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AuthTokenService authTokenService;
 
     public long count() {
         return userRepository.count();
@@ -39,6 +40,10 @@ public class UserService {
 
     public Optional<SiteUser> findByApiKey(String apiKey) {
         return userRepository.findByApiKey(apiKey);
+    }
+
+    public String genAccessToken(SiteUser user) {
+        return authTokenService.genAccessToken(user);
     }
 
 }

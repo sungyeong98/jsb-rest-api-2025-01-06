@@ -15,7 +15,7 @@ public class AuthTokenService {
     @Value("${custom.accessToken.expirationSeconds}")
     private long accessTokenExpirationSeconds;
 
-    public String genAccessToken(SiteUser user) {
+    String genAccessToken(SiteUser user) {
         long id = user.getId();
         String username = user.getUsername();
 
@@ -26,7 +26,7 @@ public class AuthTokenService {
         );
     }
 
-    public Map<String, Object> payload(String accessToken) {
+    Map<String, Object> payload(String accessToken) {
         Map<String, Object> parsePayload = Ut.jwt.payload(jwtSecretKey, accessToken);
 
         if (parsePayload == null) return null;

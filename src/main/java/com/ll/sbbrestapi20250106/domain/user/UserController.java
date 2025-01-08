@@ -80,7 +80,7 @@ public class UserController {
             throw new ServiceException("401-2", "비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = authTokenService.genAccessToken(user);
+        String accessToken = userService.genAccessToken(user);
 
         return new RsData<>(
                 "200-1",
