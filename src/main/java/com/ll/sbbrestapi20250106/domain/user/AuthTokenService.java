@@ -19,4 +19,15 @@ public class AuthTokenService {
         );
     }
 
+    public Map<String, Object> payload(String secret, String accessToken) {
+        Map<String, Object> parsePayload = Ut.jwt.payload(secret, accessToken);
+
+        if (parsePayload == null) return null;
+
+        long id = (long) (Integer) parsePayload.get("id");
+        String username = (String) parsePayload.get("username");
+
+        return Map.of("id", id, "username", username);
+    }
+
 }
