@@ -26,7 +26,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/*/question_list/{id:\\d+}", "/api/*/question_list", "/api/*/question_list/{id:\\d+}/answer_list")
                                 .permitAll()
                                 .requestMatchers("/api/*/user/login", "/api/*/user/sign-up").permitAll()
-                                .requestMatchers("/api/v1/question_list/statistics").hasAuthority("ADMIN_ACTING")
+                                .requestMatchers("/api/v1/question_list/statistics").hasAuthority("ROLE_ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 )
