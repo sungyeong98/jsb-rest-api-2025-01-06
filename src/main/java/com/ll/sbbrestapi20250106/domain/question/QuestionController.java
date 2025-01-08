@@ -150,8 +150,6 @@ public class QuestionController {
     public QuestionStatisticsResBody questionStatistics() {
         SiteUser user = rq.getActor();
 
-        if (!user.isAdmin()) throw new ServiceException("403-1", "관리자만 접근 가능합니다.");
-
         return new QuestionStatisticsResBody(
                 10,
                 10,
