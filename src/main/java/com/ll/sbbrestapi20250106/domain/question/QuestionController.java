@@ -4,6 +4,7 @@ import com.ll.sbbrestapi20250106.domain.question.dto.QuestionDetailDto;
 import com.ll.sbbrestapi20250106.domain.question.dto.QuestionListDto;
 import com.ll.sbbrestapi20250106.domain.user.SiteUser;
 import com.ll.sbbrestapi20250106.domain.user.UserService;
+import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
 import com.ll.sbbrestapi20250106.global.rq.Rq;
 import com.ll.sbbrestapi20250106.global.rsData.RsData;
 import com.ll.sbbrestapi20250106.standard.page.PageDto;
@@ -135,6 +136,26 @@ public class QuestionController {
         return new RsData<>(
                 "200-1",
                 "%d번 글이 삭제되었습니다.".formatted(id)
+        );
+    }
+
+    record QuestionStatisticsResBody(
+            long totalQuestionCount,
+            long totalPublishedCount,
+            long totalListedCount
+    ) {}
+
+    @GetMapping("/statistics")
+    @Transactional(readOnly = true)
+    public QuestionStatisticsResBody questionStatistics() {
+        SiteUser user = rq.getActor();
+
+        if (!user.isAdmin()) throw new ServiceException("403-1", "관리자만 접근 가능합니다.");
+
+        return new QuestionStatisticsResBody(
+                10,
+                10,
+                10
         );
     }
 
