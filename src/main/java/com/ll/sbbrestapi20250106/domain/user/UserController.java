@@ -96,7 +96,8 @@ public class UserController {
     @GetMapping("/profile")
     @Transactional(readOnly = true)
     public SiteUserDto profile() {
-        SiteUser user = rq.getActor();
+        SiteUser siteUser = rq.getActor();
+        SiteUser user = userService.findById(siteUser.getId()).get();
 
         return new SiteUserDto(user);
     }

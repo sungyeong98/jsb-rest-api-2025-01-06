@@ -43,6 +43,10 @@ public class UserService {
         return userRepository.findByApiKey(apiKey);
     }
 
+    public Optional<SiteUser> findById(long id) {
+        return userRepository.findById(id);
+    }
+
     public String genAccessToken(SiteUser user) {
         return authTokenService.genAccessToken(user);
     }
