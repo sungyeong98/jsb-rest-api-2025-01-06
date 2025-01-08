@@ -53,7 +53,7 @@ public class Question extends BaseTime {
         return answerList.reversed();
     }
 
-    public Optional<Answer> getAnswerById(String id) {
+    public Optional<Answer> getAnswerById(Long id) {
         return answerList.stream().filter(answer -> answer.getId().equals(id)).findFirst();
     }
 
