@@ -48,7 +48,7 @@ public class Rq {
                 siteUser.getId(),
                 siteUser.getUsername(),
                 "",
-                List.of()
+                siteUser.getAuthorities()
         );
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(

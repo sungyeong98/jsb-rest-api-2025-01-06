@@ -3,6 +3,12 @@ package com.ll.sbbrestapi20250106.domain.user;
 import com.ll.sbbrestapi20250106.domain.base.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +49,21 @@ public class SiteUser extends BaseTime {
     public SiteUser(long id, String username) {
         this.setId(id);
         this.username = username;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getAuthoritiesAsStringList()
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
+
+    public List<String> getAuthoritiesAsStringList() {
+        List<String> authorities = new ArrayList<>();
+
+        if (isAdmin()) authorities.add("ADMIN_ACTING");
+
+        return authorities;
     }
 
 }
