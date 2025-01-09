@@ -35,13 +35,32 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String accessToken = authorization.substring("Bearer ".length());
+        String token = authorization.substring("Bearer ".length());
+        String[] tokenBits = token.split(" ", 2);
+
+        if (tokenBits.length != 2) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String apiKey = tokenBits[0];
+        String accessToken = tokenBits[1];
 
         SiteUser user = userService.getUserFromAccessToken(accessToken);
 
         if (user == null) {
-            filterChain.doFilter(request, response);
-            return;
+            Optional<SiteUser> opUserByApiKey = userService.findByApiKey(apiKey);
+
+            if (opUserByApiKey.isEmpty()) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            user = opUserByApiKey.get();
+
+            String newAccessToken = userService.genAccessToken(user);
+
+            response.setHeader("Authorization", "Bearer " + apiKey + " " + newAccessToken);
         }
 
         rq.setLogin(user);

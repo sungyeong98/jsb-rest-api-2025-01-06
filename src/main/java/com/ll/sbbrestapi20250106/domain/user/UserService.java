@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public String genAuthToken(SiteUser user) {
-        return genAccessToken(user);
+        return user.getApiKey() + " " + genAccessToken(user);
     }
 
     public SiteUser getUserFromAccessToken(String accessToken) {
