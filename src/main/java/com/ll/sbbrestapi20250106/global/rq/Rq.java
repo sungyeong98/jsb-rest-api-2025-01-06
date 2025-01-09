@@ -18,14 +18,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RequestScope
 @Component
 @RequiredArgsConstructor
 public class Rq {
 
+    private final HttpServletRequest req;
     private final HttpServletResponse resp;
     private final UserService userService;
 
@@ -73,6 +76,17 @@ public class Rq {
                 .build();
 
         resp.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    public String getCookieValue(String name) {
+        return Optional
+                .ofNullable(req.getCookies())
+                .stream() // 1 ~ 0
+                .flatMap(cookies -> Arrays.stream(cookies))
+                .filter(cookie -> cookie.getName().equals(name))
+                .map(cookie -> cookie.getValue())
+                .findFirst()
+                .orElse(null);
     }
 
 }
