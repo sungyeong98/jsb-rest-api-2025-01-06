@@ -99,8 +99,7 @@ public class UserController {
     @GetMapping("/profile")
     @Transactional(readOnly = true)
     public SiteUserDto profile() {
-        SiteUser siteUser = rq.getActor();
-        SiteUser user = userService.findById(siteUser.getId()).get();
+        SiteUser user = rq.findByActor().get();
 
         return new SiteUserDto(user);
     }

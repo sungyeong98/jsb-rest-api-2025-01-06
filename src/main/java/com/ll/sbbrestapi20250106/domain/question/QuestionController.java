@@ -74,7 +74,7 @@ public class QuestionController {
             @RequestBody @Valid QuestionCreateReqBody reqBody,
             @AuthenticationPrincipal UserDetails user
     ) {
-        SiteUser actor = rq.getActor();
+        SiteUser actor = rq.findByActor().get();
 
         if (user != null) {
             actor = rq.getActorByUsername(user.getUsername());

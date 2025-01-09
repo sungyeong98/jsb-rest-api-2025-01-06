@@ -93,4 +93,16 @@ public class Rq {
         resp.setHeader(name, value);
     }
 
+    public String getHeader(String name) {
+        return req.getHeader(name);
+    }
+
+    public Optional<SiteUser> findByActor() {
+        SiteUser user = getActor();
+
+        if (user == null) return Optional.empty();
+
+        return userService.findById(user.getId());
+    }
+
 }
