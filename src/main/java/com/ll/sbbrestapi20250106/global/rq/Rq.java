@@ -6,7 +6,9 @@ import com.ll.sbbrestapi20250106.global.exceptions.ServiceException;
 import com.ll.sbbrestapi20250106.global.security.SecurityUser;
 import com.ll.sbbrestapi20250106.standard.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class Rq {
 
+    private final HttpServletResponse resp;
     private final UserService userService;
 
     public SiteUser getActor() {
@@ -58,6 +61,18 @@ public class Rq {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public void setCookie(String name, String value) {
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .domain("localhost")
+                .sameSite("Strict")
+                .secure(true)
+                .httpOnly(true)
+                .build();
+
+        resp.addHeader("Set-Cookie", cookie.toString());
     }
 
 }
