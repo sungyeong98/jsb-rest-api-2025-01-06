@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<RsData<Void>> handle(NoHandlerFoundException ex) {
 
         if (AppConfig.isNotProd()) ex.printStackTrace();
