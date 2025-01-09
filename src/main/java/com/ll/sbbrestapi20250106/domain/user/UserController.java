@@ -118,16 +118,4 @@ public class UserController {
         );
     }
 
-    // 엑세스 토큰을 편하게 얻기 위해서 만든 임시 메서드
-    // 추후 삭제 예정
-    @GetMapping("/test")
-    @Transactional(readOnly = true)
-    public String test() {
-        SiteUser user = userService.findByUsername("user1").get();
-
-        String accessToken = userService.genAccessToken(user);
-
-        return accessToken;
-    }
-
 }
