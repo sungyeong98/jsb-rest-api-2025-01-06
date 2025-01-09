@@ -24,7 +24,7 @@ public class SecurityConfig {
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/*/question_list/{id:\\d+}", "/api/*/question_list", "/api/*/question_list/{id:\\d+}/answer_list")
                                 .permitAll()
-                                .requestMatchers("/api/*/user/login", "/api/*/user/sign-up").permitAll()
+                                .requestMatchers("/api/*/user/login", "/api/*/user/sign-up", "/api/v1/user/logout").permitAll()
                                 .requestMatchers("/api/v1/question_list/statistics").hasAuthority("ROLE_ADMIN")
                                 .anyRequest()
                                 .authenticated()
